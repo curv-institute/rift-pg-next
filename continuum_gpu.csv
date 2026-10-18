@@ -1,0 +1,10 @@
+# engine=numba-cuda-4d schedule=checkerboard n_therm=3000 n_meas=4000 seed=42 eps=0.15 eps_h=0.15
+# dS = -beta * Re Tr((U' - U) @ staple), no factor 1/2. Stored <P> = (1/2) Re Tr U_p.
+# staple: forward U_nu(x+mu) U_mu(x+nu)^+ U_nu(x)^+ ; backward U_nu(x+mu-nu)^+ U_mu(x-nu)^+ U_nu(x-nu)
+# lengths, Xi, and quenched Higgs are the rift_4d.py formulas. GPU is NVIDIA GeForce RTX 3090.
+L,beta,mean_P,mean_ell,mean_Xi,mean_h,geometric
+16,3.0,0.8699486767554099,0.6006260381985361,0.02047898069368233,0.5435825264903772,true
+16,4.0,0.9035507740873152,0.6006853370559451,0.02048645157140406,0.5442813545847627,true
+24,3.5,0.889254904910752,0.6005297908235488,0.02046485568772931,0.5441532582496295,true
+# <P>(beta->inf) intercept is the constant term of the unique fit <P> = a + b/beta + c/beta^2 through these three rows only.
+# intercept_a=0.9992106117646175 b=-0.3671999877539681 c=-0.06175745182096448
