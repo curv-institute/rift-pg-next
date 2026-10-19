@@ -9,3 +9,4 @@ Eight independent cold starts, seeds 42–49, same ε and step count, are in `hm
 `unquenched_L8.csv` is four cold L=8 trajectories at β=2.5, ε=0.01, and 20 steps: the Euclidean norm of the CG residual of the identity-link `apply_hop` after 5 iterations sets the scale of one 3-vector per leapfrog step, which `exp_i_psigma` maps to one SU(2) matrix left-multiplied onto every link.
 `unquenched_force_L8.csv` is one cold L=8 trajectory at β=2.5, ε=0.01, and 4 steps; this fermion-force sketch was not in the recorded repository.
 `unquenched_force_gate.csv` is one cold L=4 trajectory at β=2.5, ε=10^{-4}, and 4 steps; the fermion force and Re φ†η use the same operator and the same tight solve.
+`unquenched_force_L4_eps1e4.csv` is three cold L=4 trajectories at β=2.5, ε=10^{-4}, and seed 42, with 20, 100, and 400 steps; the fermion force and Re φ†η use the same operator and the same tight solve.
