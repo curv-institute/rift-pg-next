@@ -13,3 +13,4 @@ Eight independent cold starts, seeds 42–49, same ε and step count, are in `hm
 `unquenched_force_L4_chain.csv` is eight trajectories on one cold L=4 chain at β=2.5, ε=10^{-4}, and 400 steps, seed 42. φ and the momenta are redrawn each trajectory. The CG replaces a collapsed recursive residual with φ − D†D η and still exits only when the true residual is below 10^{-12}.
 `unquenched_force_L4_tau4e-4.csv` is one trajectory of length τ=4×10^{-4}, with ε=4×10^{-4}/280 and 280 steps, from the accepted trajectory-1 endpoint of that chain. φ and the initial momenta are the ones held fixed for the coarser τ=4×10^{-4} runs.
 `hasenbusch.py` splits det(D†D) with one Hasenbusch parameter μ². The quark mass in D stays 0.1. `hasenbusch_L4.csv` holds the τ=4×10^{-4} trajectories on the trajectory-1 endpoint, for μ² = 0.01, 0.1, 1, and 10, whose |ΔH| is below 0.1.
+`hasenbusch_L4_tau004.csv` is one μ²=0.1 trajectory of length τ=0.04 on that endpoint, with ε=10^{-3} and 40 steps.
