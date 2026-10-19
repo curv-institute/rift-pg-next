@@ -10,3 +10,4 @@ Eight independent cold starts, seeds 42–49, same ε and step count, are in `hm
 `unquenched_force_L8.csv` is one cold L=8 trajectory at β=2.5, ε=0.01, and 4 steps; this fermion-force sketch was not in the recorded repository.
 `unquenched_force_gate.csv` is one cold L=4 trajectory at β=2.5, ε=10^{-4}, and 4 steps; the fermion force and Re φ†η use the same operator and the same tight solve.
 `unquenched_force_L4_eps1e4.csv` is three cold L=4 trajectories at β=2.5, ε=10^{-4}, and seed 42, with 20, 100, and 400 steps; the fermion force and Re φ†η use the same operator and the same tight solve.
+`unquenched_force_L4_chain.csv` is eight trajectories on one cold L=4 chain at β=2.5, ε=10^{-4}, and 400 steps, seed 42. φ and the momenta are redrawn each trajectory. The CG replaces a collapsed recursive residual with φ − D†D η and still exits only when the true residual is below 10^{-12}.

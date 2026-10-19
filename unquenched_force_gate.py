@@ -35,7 +35,7 @@ EPS = 1e-4
 N_STEPS = 4
 SEED = 42
 REL_TOL = 1e-12
-MAX_CG = 4000
+MAX_CG = 20000
 FORCE_LINKS = (
     (0, (0, 0, 0, 0)),
     (1, (1, 0, 0, 0)),
@@ -51,18 +51,41 @@ def complex_gaussian(size, rng):
     return rng.normal(size=shape) + 1j * rng.normal(size=shape)
 
 
+def _residual_collapsed(rho, residual, true):
+    """ρ underflow, or the recursive residual no longer matches the true one."""
+    if abs(rho) < 1e-30:
+        return True
+    true_norm = float(np.linalg.norm(true))
+    if true_norm == 0.0:
+        return float(np.linalg.norm(residual)) != 0.0
+    return float(np.linalg.norm(residual - true)) > 0.1 * true_norm
+
+
 def solve_eta(phi, U, mass, size):
-    """Tight CG for (D†D) eta = phi. Same routine for the check and the trajectory."""
+    """Tight CG for (D†D) eta = phi. Same routine for the check and the trajectory.
+
+    When the recursive residual collapses, replace it with φ − D†D η and
+    continue. Exit only when that true residual is below REL_TOL.
+    """
     eta = np.zeros_like(phi)
     residual = np.array(phi, copy=True)
     direction = np.array(residual, copy=True)
     rho = np.vdot(residual, residual)
     phi_norm = np.linalg.norm(phi)
+    if phi_norm == 0.0:
+        return eta, 0.0, 0
     rel = 1.0
     used = 0
     for used in range(1, MAX_CG + 1):
         if abs(rho) < 1e-30:
-            break
+            residual = phi - apply_A(eta, U, mass, size)
+            direction = np.array(residual, copy=True)
+            rho = np.vdot(residual, residual)
+            rel = float(np.linalg.norm(residual) / phi_norm)
+            if rel < REL_TOL:
+                return eta, rel, used
+            if abs(rho) < 1e-30:
+                continue
         hopped = apply_A(direction, U, mass, size)
         alpha = rho / np.vdot(direction, hopped)
         eta = eta + alpha * direction
@@ -71,9 +94,14 @@ def solve_eta(phi, U, mass, size):
         direction = residual + (rho_new / rho) * direction
         rho = rho_new
         if used % 20 == 0 or used == MAX_CG:
-            rel = float(np.linalg.norm(apply_A(eta, U, mass, size) - phi) / phi_norm)
+            true = phi - apply_A(eta, U, mass, size)
+            rel = float(np.linalg.norm(true) / phi_norm)
             if rel < REL_TOL:
                 return eta, rel, used
+            if _residual_collapsed(rho, residual, true):
+                residual = true
+                direction = np.array(true, copy=True)
+                rho = np.vdot(residual, residual)
     rel = float(np.linalg.norm(apply_A(eta, U, mass, size) - phi) / phi_norm)
     if rel >= REL_TOL:
         raise SystemExit(f"CG residual {rel} after {used} iterations")
